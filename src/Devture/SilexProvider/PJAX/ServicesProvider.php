@@ -10,6 +10,23 @@ class ServicesProvider implements ServiceProviderInterface {
 
 	public function register(Application $app) {
 		/**
+		 * Strips the _pjax query string parameter from PJAX requests.
+		 *
+		 * PJAX uses that parameter to make the URL unique for regular requests
+		 * and PJAX requests (partial).
+		 *
+		 * This extra parameter is not needed in our application and can even
+		 * cause certain problems when it's there.
+		 */
+		$app['pjax.listener.request_cleaner'] = function () {
+			return function (Request $request) {
+				if ($request->headers->has('x-pjax')) {
+					$request->query->remove('_pjax');
+				}
+			};
+		};
+
+		/**
 		 * Marks PJAX responses with the current request URI,
 		 * to make PJAX handle redirects properly
 		 * (see GitHub issue #85 for defunkt/jquery-pjax for more).
@@ -24,6 +41,7 @@ class ServicesProvider implements ServiceProviderInterface {
 	}
 
 	public function boot(Application $app) {
+		$app->before($app['pjax.listener.request_cleaner']);
 		$app->after($app['pjax.listener.response_marker']);
 		$app['twig']->addExtension(new PjaxDetectionExtension($app));
 	}
