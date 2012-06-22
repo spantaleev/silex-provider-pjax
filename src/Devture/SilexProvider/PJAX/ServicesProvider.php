@@ -4,7 +4,7 @@ use Silex\Application;
 use Silex\ServiceProviderInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Devture\SilexProvider\PJAX\Twig\Extension\PjaxDetectionExtension;
+use Devture\SilexProvider\PJAX\Twig\Extension\PjaxHelperExtension;
 
 class ServicesProvider implements ServiceProviderInterface {
 
@@ -43,7 +43,7 @@ class ServicesProvider implements ServiceProviderInterface {
 	public function boot(Application $app) {
 		$app->before($app['pjax.listener.request_cleaner']);
 		$app->after($app['pjax.listener.response_marker']);
-		$app['twig']->addExtension(new PjaxDetectionExtension($app));
+		$app['twig']->addExtension(new PjaxHelperExtension($app));
 	}
 
 }
