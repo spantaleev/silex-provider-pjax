@@ -33,7 +33,9 @@ class ServicesProvider implements ServiceProviderInterface {
 		 */
 		$app['pjax.listener.response_marker'] = function () {
 			return function (Request $request, Response $response) {
-				if ($request->headers->has('x-pjax')) {
+				//Only mark unmarked responses.
+				//If the developer has already marked it, he knows what he's doing.
+				if ($request->headers->has('x-pjax') && !$response->headers->has('x-pjax-url')) {
 					$response->headers->set('x-pjax-url', $request->getRequestUri());
 				}
 			};
