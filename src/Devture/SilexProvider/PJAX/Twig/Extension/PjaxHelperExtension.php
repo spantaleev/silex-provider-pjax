@@ -1,5 +1,6 @@
 <?php
 namespace Devture\SilexProvider\PJAX\Twig\Extension;
+
 class PjaxHelperExtension extends \Twig_Extension {
 
 	private $container;
@@ -9,7 +10,7 @@ class PjaxHelperExtension extends \Twig_Extension {
 	}
 
 	public function getName() {
-		return 'pjax_helper_extension';
+		return 'devture_pjax_helper_extension';
 	}
 
 	public function getFunctions() {
@@ -18,18 +19,16 @@ class PjaxHelperExtension extends \Twig_Extension {
 
 	public function getFilters() {
 		return array(
-				'strip_pjax_param' => new \Twig_Filter_Method($this, 'stripPjaxQueryStringParam'),);
+			'strip_pjax_param' => new \Twig_Filter_Method($this, 'stripPjaxQueryStringParam'),
+		);
 	}
 
 	public function isPjax() {
-		return $this->container['request']->headers->has('x-pjax');
+		return $this->container['devture_pjax.request_detect']($this->container['request']);
 	}
 
-	public function stripPjaxQueryStringParam($uri) {
-		$uri = preg_replace("/\?_pjax=[^&]+&?/", "?", $uri);
-		$uri = preg_replace("/_pjax=[^&]+&?/", "", $uri);
-		$uri = preg_replace("/[\?&]$/", "", $uri);
-		return $uri;
+	public function stripPjaxQueryStringParam($url) {
+		return $this->container['devture_pjax.url_clean']($url);
 	}
 
 }
