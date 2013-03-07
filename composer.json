@@ -1,6 +1,8 @@
 {
 	"name": "devture/silex-provider-pjax",
 	"description": "Silex provider for PJAX integration",
+	"keywords": ["silex", "pjax"],
+	"license": "BSD",
 	"authors": [
 		{
 			"name": "Slavi Pantaleev",
@@ -12,7 +14,7 @@
 	},
 	"autoload": {
 		"psr-0": {
-			"Devture\\SilexProvider\\PJAX": "src/"
+			"Devture\\SilexProvider\\PJAX\\": "src/"
 		}
 	}
 }
